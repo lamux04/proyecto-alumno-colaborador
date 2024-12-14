@@ -23,6 +23,7 @@ def imprimir_comunicaciones(comunicaciones):
         print('     Subred destino -> ', i["subred_destino"])
         print('     Nº veces -> ', i["veces"])
         print('     frecuencia -> ', i["frecuencia"])
+        print('')
         n += 1
 
 try:
