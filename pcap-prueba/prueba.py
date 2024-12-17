@@ -48,7 +48,7 @@ try:
                 "ultima_comunicacion": timestamp, 
                 "subred_origen": ip_network(f"{ip_src}/24", strict=False),
                 "subred_destino": ip_network(f"{ip_dst}/24", strict=False)
-                })
+            })
 
     # Calculamos cada cuanto tiempo se mandan mensajes en milisegundos
     for i in comunicaciones:
