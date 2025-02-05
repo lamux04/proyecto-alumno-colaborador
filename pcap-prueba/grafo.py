@@ -1,13 +1,18 @@
+############ PARA EJECUTAR: python3 grafo.py "ruta/relativa/a/pcap"
+############ Una vez ejecutado, el script creará un html con un grafo interactivo 
+############ con las conexiones que se producen en la red.
+
 from pyvis.network import Network
 import networkx as nx
 import matplotlib.pyplot as plt
 import subprocess
 from ipaddress import ip_network
+import sys
 
 # Configuración del comando tshark
 TSHARK_COMMAND = [
     "tshark",
-    "-r", "./1.pcap",
+    "-r", sys.argv[1],
     "-T", "fields",
     "-e", "ip.src",
     "-e", "ip.dst",
