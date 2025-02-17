@@ -114,43 +114,6 @@ def imprimir_conexiones(conexiones):
         for ip_destino in conexiones[ip_origen]:
             print(f"    - {ip_destino}")
 
-def dibujar_grafo(conexiones):
-    '''
-    Dibuja un grafo utilizando NetworkX y Matplotlib, coloreando los nodos según sus subredes.
-    '''
-    # Creamos un grafo dirigido
-    grafo = nx.DiGraph()
-
-    # Añadimos las aristas al grafo
-    for ip_origen, destinos in conexiones.items():
-        for ip_destino in destinos:
-            grafo.add_edge(ip_origen, ip_destino)
-
-    # Asignamos colores a los nodos según la subred
-    colores_nodos = asignar_colores_por_subred(conexiones)
-
-    # Extraemos los colores en el orden de los nodos
-    node_colors = [colores_nodos[node] for node in grafo.nodes()]
-
-    # Dibujamos el grafo
-    plt.figure(figsize=(12, 8))
-    pos = nx.spring_layout(grafo, k=2, iterations=100, seed=42)  # Distribución de nodos
-    nx.draw(
-        grafo, pos,
-        with_labels=True,
-        node_color=node_colors,
-        node_size=3000,
-        font_size=10,
-        font_color='black',
-        font_weight='bold',
-        edge_color='gray',
-        arrowsize=20
-    )
-
-    # Mostramos el grafo
-    plt.title("Grafo de Conexiones con Subredes Coloreadas")
-    plt.show()
-
 def obtener_subred(ip, mascara="/24"):
     '''
     Calcula la subred de una IP dada.
@@ -193,11 +156,17 @@ def grafo_interactivo(conexiones):
     # Asignamos colores a los nodos según la subred
     colores_subred = asignar_colores_por_subred(conexiones)
 
+    dibujados = []
+
     # Agregar nodos y aristas
     for origen, destinos in conexiones.items():
-        net.add_node(origen, label=origen, color=colores_subred[obtener_subred(origen)], size=150, font={'size': 20})
+        if origen not in dibujados:
+            net.add_node(origen, label=origen, color=colores_subred[obtener_subred(origen)], size=150, font={'size': 20})
+            dibujados.append(origen)
         for destino in destinos:
-            net.add_node(destino, label=destino, color=colores_subred[obtener_subred(destino)], size=155, font={'size': 20})
+            if destino not in dibujados:
+                net.add_node(destino, label=destino, color=colores_subred[obtener_subred(destino)], size=155, font={'size': 20})
+                dibujados.append(destino)
             net.add_edge(origen, destino)
 
     # Genera y abre un archivo HTML interactivo
